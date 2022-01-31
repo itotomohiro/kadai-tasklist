@@ -1,5 +1,18 @@
-<h1>タスク新規作成ページ</h1>
+<% if logged_in? %>
+  <p>ログイン完了ユーザ: <%= current_user.name %></p>
+  
+  <h1>タスク新規作成ページ</h1>
 
-<%= render 'form', task: @task %>
+  <%= render 'form', task: @task %>
+  
+  <%= link_to '一覧に戻る',tasks_path %>
 
-<%= link_to '一覧に戻る',tasks_path %>
+<% else %>
+  <div class="bg-secondary p-3 p-sm-5 my-4 rounded">
+    <div class="text-center text-white">
+      <h1>Welcome to the Tasklists</h1>
+      <%= link_to 'Login', login_path, class: 'btn btn-lg btn-primary' %>
+      <%= link_to 'Sign up', signup_path, class: 'btn btn-lg btn-primary' %>
+    </div>
+  </div>
+<% end %>
