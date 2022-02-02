@@ -6,20 +6,21 @@ class TasksController < ApplicationController
     unless logged_in?
       redirect_to login_url
     end
-#    @tasks = current_user.tasks.all
     @tasks = Task.all
-#    @tasks = Task.where(user_id: @user.id)
   end
   
   def show
-    unless my_task?
+    unless logged_in?
       redirect_to login_url
     end
-    @task = Task.find(params[:id])
+
+    unless my_task?
+      redirect_to root_url
+    end
+    set_task
   end
 
   def new
-#    @task = Task.new
     if logged_in?
     @task = current_user.tasks.build  # form_with 用
     end
@@ -37,14 +38,18 @@ class TasksController < ApplicationController
   end
 
   def edit
-    unless my_task?
+    unless logged_in?
       redirect_to login_url
     end
-    @task = Task.find(params[:id])
+
+    unless my_task?
+      redirect_to root_url
+    end
+    set_task
   end
 
   def update
-    @task = Task.find(params[:id])
+    set_task
     if @task.update(task_params)
       flash[:success] = 'Taskが正常に更新されました' 
       redirect_to @task
@@ -55,7 +60,7 @@ class TasksController < ApplicationController
   end
   
   def destroy
-    @task = Task.find(params[:id])
+    set_task
     @task.destroy
     flash[:success] = 'Taskが正常に削除されました' 
     redirect_to tasks_url
