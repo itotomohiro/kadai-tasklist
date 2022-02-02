@@ -1,19 +1,13 @@
 class TasksController < ApplicationController
   
   before_action :set_task, only: [:show, :edit, :update, :destroy]
+  before_action :not_login_redirect, only: [:index, :show, :edit]
 
   def index
-    unless logged_in?
-      redirect_to login_url
-    end
     @tasks = Task.all
   end
   
   def show
-    unless logged_in?
-      redirect_to login_url
-    end
-
     unless my_task?
       redirect_to root_url
     end
@@ -22,7 +16,7 @@ class TasksController < ApplicationController
 
   def new
     if logged_in?
-    @task = current_user.tasks.build  # form_with 用
+      @task = current_user.tasks.build  # form_with 用
     end
   end
 
@@ -38,10 +32,6 @@ class TasksController < ApplicationController
   end
 
   def edit
-    unless logged_in?
-      redirect_to login_url
-    end
-
     unless my_task?
       redirect_to root_url
     end
@@ -80,6 +70,12 @@ class TasksController < ApplicationController
 
   def task_params
     params.require(:task).permit(:content, :status)
+  end
+  
+  def not_login_redirect
+    unless logged_in?
+      redirect_to login_url
+    end
   end
   
 end
