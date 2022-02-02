@@ -1,6 +1,6 @@
 class TasksController < ApplicationController
   
-  before_action :require_user_logged_in, only: [:index, :show, :edit, :update, :destroy]
+  before_action :require_user_logged_in, only: [:index, :show, :new, :edit, :update, :destroy]
   before_action :correct_user, only: [:show, :edit, :update, :destroy]
 
   def index
@@ -11,9 +11,7 @@ class TasksController < ApplicationController
   end
 
   def new
-    if logged_in?
-      @task = current_user.tasks.build  # form_with 用
-    end
+    @task = current_user.tasks.build  # form_with 用
   end
 
   def create
