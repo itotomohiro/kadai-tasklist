@@ -6,13 +6,5 @@ module SessionsHelper
   def logged_in?
     !!current_user
   end
-  
-  def my_task
-    @current_task ||= current_user.tasks.find_by(id: params[:id])
-  end
-
-  def my_task?
-    !!my_task
-  end
 
 end
